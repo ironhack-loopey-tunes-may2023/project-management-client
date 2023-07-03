@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import AddProject from "./../components/AddProject";
 import ProjectCard from "./../components/ProjectCard";
-import AddProject from "../components/AddProject";
+import projectsService from "../services/projects.service";
 
 const API_URL = "http://localhost:5005";
+
 
 function ProjectListPage() {
   const [projects, setProjects] = useState([]);
 
   const getAllProjects = () => {
-    axios
-      .get(`${API_URL}/api/projects`)
+
+    // axios
+    //   .get(
+    //   `${API_URL}/api/projects`,
+    //   { headers: { Authorization: `Bearer ${storedToken}` } }
+    // )
+    projectsService.getAllProjects()
       .then((response) => setProjects(response.data))
       .catch((error) => console.log(error));
   };

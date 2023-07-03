@@ -1,19 +1,24 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from "axios";
+import { useNavigate, useParams } from 'react-router-dom';
+import projectsService from "../services/projects.service";
 
-const API_URL = "http://localhost:5005";
 
 function EditProjectPage(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  
+
+  const navigate =  useNavigate();
   const { projectId } = useParams();
-  const navigate = useNavigate();
+  
   
   useEffect(() => {
-    axios
-      .get(`${API_URL}/api/projects/${projectId}`)
+    // axios
+    //   .get(
+    //     `${API_URL}/api/projects/${projectId}`,
+    //     { headers: { Authorization: `Bearer ${storedToken}` } }
+    //   )
+
+    projectsService.getProject(projectId)
       .then((response) => {
         const oneProject = response.data;
         setTitle(oneProject.title);
@@ -28,8 +33,14 @@ function EditProjectPage(props) {
     e.preventDefault();
     const requestBody = { title, description };
 
-    axios
-      .put(`${API_URL}/api/projects/${projectId}`, requestBody)
+    // axios
+    //   .put(
+    //     `${API_URL}/api/projects/${projectId}`,
+    //     requestBody,
+    //     { headers: { Authorization: `Bearer ${storedToken}` } }
+    //   )
+    
+    projectsService.updateProject(projectId, requestBody)    
       .then((response) => {
         navigate(`/projects/${projectId}`)
       });
@@ -37,12 +48,14 @@ function EditProjectPage(props) {
   
   
   const deleteProject = () => {
-    
-    axios
-      .delete(`${API_URL}/api/projects/${projectId}`)
-      .then(() => {
-        navigate("/projects");
-      })
+
+    // axios
+    //   .delete(
+    //     `${API_URL}/api/projects/${projectId}`,
+    //     { headers: { Authorization: `Bearer ${storedToken}` } }
+    //   )
+    projectsService.deleteProject(projectId)        
+      .then(() => navigate("/projects"))
       .catch((err) => console.log(err));
   };  
 
